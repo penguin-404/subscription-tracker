@@ -1,21 +1,20 @@
 import { Router } from "express";
+import { authorize } from "../middlewares/auth.middleware.js";
+import { createSubscription, getUserSubscriptions } from "../controllers/subscription.controller.js";
 
 const subscriptionRouter = Router();
 
 subscriptionRouter.get("/", (req, res) => {
   // Handle fetching all subscriptions
   res.send("Get all subscriptions endpoint");
-});
+}); 
 
 subscriptionRouter.get("/:id", (req, res) => {
   // Handle fetching a subscription by ID
   res.send(`Get subscription with ID: ${req.params.id}`);
 });
 
-subscriptionRouter.post("/", (req, res) => {
-  // Handle creating a new subscription
-  res.send("Create new subscription endpoint");
-});
+subscriptionRouter.post("/", authorize , createSubscription);
 
 subscriptionRouter.put("/:id", (req, res) => {
   // Handle updating a subscription by ID
@@ -27,10 +26,7 @@ subscriptionRouter.delete("/:id", (req, res) => {
   res.send(`Delete subscription with ID: ${req.params.id}`);
 });
 
-subscriptionRouter.get("/user/:id", (req, res) => {
-  // Handle fetching subscriptions for a user by user ID
-  res.send(`Get subscriptions for user with ID: ${req.params.id}`);
-});
+subscriptionRouter.get("/user/:id", authorize, getUserSubscriptions);
 
 subscriptionRouter.put('/:id/cancel', (req, res) => {
   // Handle canceling a subscription by ID
